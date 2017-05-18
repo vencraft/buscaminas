@@ -53,18 +53,18 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 	for(int i = 0; i < CANT_COL; i++){
 		printf("%c ", i + 'A');
 		for(int j = 0; j < CANT_FILA; j++){
-				if(m[i][j] >= 0){
-					printf("%d ", m[i][j]);
-				}else if(m[i][j] == MARCADA || m[i][j] == MAL_MARCADA){
-					printf("M ");
-				}else if(m[i][j] == BOMBA_EXPLOTA){
-					printf("X ");
-				}else if(m[i][j] == BOMBA_MUESTRA){
-					printf("* ");
-				}else {
-					printf("? ");
-					//printf("%d",m[i][j]);
-				}	
+			if(m[i][j] >= 0){
+				printf("%d ", m[i][j]);
+			}else if(m[i][j] == MARCADA || m[i][j] == MAL_MARCADA){
+				printf("M ");
+			}else if(m[i][j] == BOMBA_EXPLOTA){
+				printf("X ");
+			}else if(m[i][j] == BOMBA_MUESTRA){
+				printf("* ");
+			}else {
+				printf("? ");
+				//printf("%d",m[i][j]);
+			}	
 		}
 		printf("\n");
 	}
@@ -117,16 +117,16 @@ bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 * Marca posible bomba en el tablero.
 */
 int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
-		int cm = 0;
-		if(m[f][c] < 0){
-			if(m[f][c] == BOMBA){
-				m[f][c] = MARCADA;
-				cm++;
-			}else{
-				m[f][c] = MAL_MARCADA;
-			}
+	int cm = 0;
+	if(m[f][c] < 0){
+		if(m[f][c] == BOMBA){
+			m[f][c] = MARCADA;
+			cm++;
+		}else{
+			m[f][c] = MAL_MARCADA;
 		}
-		return cm;
+	}
+	return cm;
 }
 // hay que hacerla
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
