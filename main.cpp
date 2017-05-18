@@ -25,11 +25,11 @@ void inicializar(int m[CANT_FILA][CANT_COL]){
 */
 void poner_bombas(int m[CANT_FILA][CANT_COL],int bombas, int x, int y){
 	int puestas = 0, a, b;
-	while (puestas < bombas){
+	while(puestas < bombas){
 		a = rand() % CANT_FILA;
 		b = rand() % CANT_COL;
 		if(m[a][b] != BOMBA){
-			if (!(x == a && y == b)){
+			if(!(x == a && y == b)){
 				m[a][b] = BOMBA;
 				puestas++;
 			}
@@ -46,7 +46,7 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 	printf("M: Marcar\n");
 	printf("B: Buscar\n");
 	printf("  ");
-	for (int i = 0; i < CANT_COL; i++){
+	for(int i = 0; i < CANT_COL; i++){
 		printf("%c ", i + 'A');
 	}
 	printf("\n");
@@ -61,14 +61,13 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 				printf("X ");
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
-			}else {
+			}else{
 				printf("? ");
 				//printf("%d",m[i][j]);
-			}	
+			}
 		}
 		printf("\n");
 	}
-	
 }
 /*
 * Funcion que verifica si hay bombas en la celda, siempre
@@ -76,7 +75,7 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 * devuelve un 1, de lo contrario devuelve un 0.
 */
 int hayBombas( int m[CANT_FILA][CANT_COL], int x, int y){
-	if (x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
+	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
 		if(m[x][y] == BOMBA || m[x][y] == MARCADA){
 			return 1;
 		}
@@ -85,11 +84,11 @@ int hayBombas( int m[CANT_FILA][CANT_COL], int x, int y){
 }
 /*
 * Explora la casilla y verifica la cantidad de bombas
-* adyacentes; si hay bomba se pierde, de lo contrario 
+* adyacentes; si hay bomba se pierde, de lo contrario
 * se asigna el numero de bombas cercanas.
 */
 bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
-	if (m[x][y] == BOMBA || m[x][y] == MARCADA){
+	if(m[x][y] == BOMBA || m[x][y] == MARCADA){
 		m[x][y] = BOMBA_EXPLOTA;
 		for(int i = 0; i < CANT_COL; i++){
 			for(int j = 0; j < CANT_FILA; j++){
@@ -133,10 +132,10 @@ bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] >= 0){
 		int cant = m[x][y]; //numero que tengo en ese lugar
 		// repetir 8 veces por todas las casillas adyacentes
-		if (x-1 >= 0){
-			if (m[x-1][y] == MAL_MARCADA){
+		if(x-1 >= 0){
+			if(m[x-1][y] == MAL_MARCADA){
 				return false;
-			}else if (m[x-1][y] == MARCADA){
+			}else if(m[x-1][y] == MARCADA){
 				cant--;
 			}
 		}
@@ -167,7 +166,7 @@ main () {
 		columna = columnachar - 'A';
 		switch(op){
 			case 'E':{// Comprueba si es la primer jugada
-				if (primerajugada == true){
+				if(primerajugada == true){
 					// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
 					inicializar(tablero);
 					// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
@@ -176,7 +175,7 @@ main () {
 					exploradas-= 1;
 					primerajugada = false;
 					// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
-				} else if ((explorar(tablero,fila,columna) != true)){
+				} else if((explorar(tablero,fila,columna) != true)){
 					imprimir(tablero);
 					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 					fin = true;
@@ -198,7 +197,7 @@ main () {
 			default:{
 				}
 		}
-		if (marcadas == 0 && exploradas == 0){
+		if(marcadas == 0 && exploradas == 0){
 			imprimir(tablero);
 			printf("¡¡HAS GANADO LA PARTIDA!!\n");
 			fin = true;
