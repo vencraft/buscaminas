@@ -175,7 +175,7 @@ main () {
 					exploradas-= 1;
 					primerajugada = false;
 					// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
-				} else if((explorar(tablero,fila,columna) != true)){
+				}else if((explorar(tablero,fila,columna) != true)){
 					imprimir(tablero);
 					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 					fin = true;
