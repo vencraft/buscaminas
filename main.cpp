@@ -135,6 +135,7 @@ int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
 }
 // hay que hacerla
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
+	if ()
 	if(casillaExiste(m,x-1,y-1)){
 		explorar(m,x-1,y-1);
 	}
@@ -159,18 +160,7 @@ bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(casillaExiste(m,x+1,y+1)){
 		explorar(m,x+1,y+1);
 	}
-	/*
-    if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
-	if(m[x-1][y] < 0){
-		if(m[x-1][y] == MAL_MARCADA){
-			m[x-1][y] = BOMBA_EXPLOTA;
-		}else if{
-	
-
-		}
-	
-	
-	
+/*
 	if(m[x][y] >= 0){
 		int cant = m[x][y]; //numero que tengo en ese lugar
 		// repetir 8 veces por todas las casillas adyacentes
