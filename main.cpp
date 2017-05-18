@@ -109,7 +109,6 @@ bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 		suma_bombas+=hayBombas(m,x+1,y+1); //abajo derecha
 		suma_bombas+=hayBombas(m,x-1,y+1); //arriba derecha
 		suma_bombas+=hayBombas(m,x+1,y-1); //abajo izquierda
-		
 		m[x][y] = suma_bombas;
 		return true;
 	}
@@ -118,7 +117,7 @@ bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 * Marca posible bomba en el tablero.
 */
 int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
-        int cm = 0;
+		int cm = 0;
 		if(m[f][c] < 0){
 			if(m[f][c] == BOMBA){
 				m[f][c] = MARCADA;
@@ -133,7 +132,6 @@ int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] >= 0){
 		int cant = m[x][y]; //numero que tengo en ese lugar
-	
 		// repetir 8 veces por todas las casillas adyacentes
 		if (x-1 >= 0){
 			if (m[x-1][y] == MAL_MARCADA){
@@ -142,11 +140,8 @@ bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 				cant--;
 			}
 		}
-		
-		//if (cant == 0){
-			
-		
-	}	
+		//if (cant == 0)
+	}
 }
 main () {
 	int tablero[CANT_FILA][CANT_COL];
@@ -159,7 +154,6 @@ main () {
 	printf("¡Bienvenido al BUSCAMINAS!\n");
 	printf("Ingrese cantidad de bombas:\n");
 	scanf("%d%c",&cant_bombas,&enter);
-	
 	marcadas = cant_bombas;
 	exploradas = CANT_FILA * CANT_COL - cant_bombas;
 	do{
@@ -172,42 +166,37 @@ main () {
 		fila = filachar - 'A';
 		columna = columnachar - 'A';
 		switch(op){
-			case 'E':{	// Comprueba si es la primer jugada
-						if (primerajugada == true){
-							
-							// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
-							inicializar(tablero);
-						
-							// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
-							poner_bombas(tablero,cant_bombas,fila,columna);
-							explorar(tablero,fila,columna);
-							exploradas-= 1;
-							primerajugada = false;
-						
+			case 'E':{// Comprueba si es la primer jugada
+					if (primerajugada == true){
+						// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
+						inicializar(tablero);
+						// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
+						poner_bombas(tablero,cant_bombas,fila,columna);
+						explorar(tablero,fila,columna);
+						exploradas-= 1;
+						primerajugada = false;
 						// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
-						} else if ((explorar(tablero,fila,columna) != true)){
-							imprimir(tablero);
-							printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
-							fin = true;
-						}else{
-							// No se exploto una bomba y se muestra el valor de bombas adyacentes.
-							explorar(tablero,fila,columna);
-							exploradas-= 1;
-						}
-						
-						break;
+					} else if ((explorar(tablero,fila,columna) != true)){
+						imprimir(tablero);
+						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
+						fin = true;
+					}else{
+						// No se exploto una bomba y se muestra el valor de bombas adyacentes.
+						explorar(tablero,fila,columna);
+						exploradas-= 1;
+					}
+					break;
 					}
 			case 'M':{
-						marcar(tablero,fila,columna);
-						marcadas-= 1;
+					marcar(tablero,fila,columna);
+					marcadas-= 1;
 					break;
 					}
 			case 'B':{
 					break;
 					}
 			default:{
-				
-					}		
+					}
 		}
 		if (marcadas == 0 && exploradas == 0){
 			imprimir(tablero);
