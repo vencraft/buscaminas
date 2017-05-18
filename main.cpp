@@ -167,36 +167,36 @@ main () {
 		columna = columnachar - 'A';
 		switch(op){
 			case 'E':{// Comprueba si es la primer jugada
-					if (primerajugada == true){
-						// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
-						inicializar(tablero);
-						// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
-						poner_bombas(tablero,cant_bombas,fila,columna);
-						explorar(tablero,fila,columna);
-						exploradas-= 1;
-						primerajugada = false;
-						// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
-					} else if ((explorar(tablero,fila,columna) != true)){
-						imprimir(tablero);
-						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
-						fin = true;
-					}else{
-						// No se exploto una bomba y se muestra el valor de bombas adyacentes.
-						explorar(tablero,fila,columna);
-						exploradas-= 1;
-					}
-					break;
-					}
+				if (primerajugada == true){
+					// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
+					inicializar(tablero);
+					// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
+					poner_bombas(tablero,cant_bombas,fila,columna);
+					explorar(tablero,fila,columna);
+					exploradas-= 1;
+					primerajugada = false;
+					// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
+				} else if ((explorar(tablero,fila,columna) != true)){
+					imprimir(tablero);
+					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
+					fin = true;
+				}else{
+					// No se exploto una bomba y se muestra el valor de bombas adyacentes.
+					explorar(tablero,fila,columna);
+					exploradas-= 1;
+				}
+				break;
+				}
 			case 'M':{
-					marcar(tablero,fila,columna);
-					marcadas-= 1;
-					break;
-					}
+				marcar(tablero,fila,columna);
+				marcadas-= 1;
+				break;
+				}
 			case 'B':{
-					break;
-					}
+				break;
+				}
 			default:{
-					}
+				}
 		}
 		if (marcadas == 0 && exploradas == 0){
 			imprimir(tablero);
