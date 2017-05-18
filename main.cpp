@@ -6,8 +6,8 @@
 #define MARCADA -2
 #define MAL_MARCADA -3
 #define INTERROGACION -4
-#define CANT_FILA 4
-#define CANT_COL 4
+#define CANT_FILA 8
+#define CANT_COL 8
 //falta funcion marcar que se hizo en la clase anterior
 /*
 * Inicia la matriz que se mostrará al inicio sin las bombas.
@@ -82,6 +82,12 @@ int hayBombas( int m[CANT_FILA][CANT_COL], int x, int y){
 	}
 	return 0;
 }
+bool casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
+	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
+			return true;
+	}
+	return false;
+}
 /*
 * Explora la casilla y verifica la cantidad de bombas
 * adyacentes; si hay bomba se pierde, de lo contrario
@@ -129,6 +135,42 @@ int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
 }
 // hay que hacerla
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
+	if(casillaExiste(m,x-1,y-1)){
+		explorar(m,x-1,y-1);
+	}
+	if(casillaExiste(m,x-1,y)){
+		explorar(m,x-1,y);
+	}
+	if(casillaExiste(m,x-1,y+1)){
+		explorar(m,x-1,y+1);
+	}
+	if(casillaExiste(m,x,y-1)){
+		explorar(m,x,y-1);
+	}
+	if(casillaExiste(m,x,y+1)){
+		explorar(m,x,y+1);
+	}	
+	if(casillaExiste(m,x+1,y-1)){
+		explorar(m,x+1,y-1);
+	}
+	if(casillaExiste(m,x+1,y)){
+		explorar(m,x+1,y);
+	}
+	if(casillaExiste(m,x+1,y+1)){
+		explorar(m,x+1,y+1);
+	}
+	/*
+    if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
+	if(m[x-1][y] < 0){
+		if(m[x-1][y] == MAL_MARCADA){
+			m[x-1][y] = BOMBA_EXPLOTA;
+		}else if{
+	
+
+		}
+	
+	
+	
 	if(m[x][y] >= 0){
 		int cant = m[x][y]; //numero que tengo en ese lugar
 		// repetir 8 veces por todas las casillas adyacentes
@@ -141,6 +183,7 @@ bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 		}
 		//if (cant == 0)
 	}
+*/
 }
 main () {
 	int tablero[CANT_FILA][CANT_COL];
@@ -161,11 +204,14 @@ main () {
 		printf("Marcadas: %d ", marcadas);
 		printf("Exploradas: %d\n", exploradas);
 		printf("Realice su jugada: \n");
+		/*
+		* Obtener datos del usuario.
+		*/
 		scanf("%c%c%c%c%c", &op, &esp, &filachar, &columnachar, &enter);
 		fila = filachar - 'A';
 		columna = columnachar - 'A';
 		switch(op){
-			case 'E':{// Comprueba si es la primer jugada
+			case 'E':{// Comprueba si es la primer jugada.
 				if(primerajugada == true){
 					// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
 					inicializar(tablero);
@@ -192,6 +238,7 @@ main () {
 				break;
 				}
 			case 'B':{
+				buscar(tablero,fila,columna);
 				break;
 				}
 			default:{
