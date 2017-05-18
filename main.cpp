@@ -120,12 +120,12 @@ int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
 	if(m[f][c] < 0){
 		if(m[f][c] == BOMBA){
 			m[f][c] = MARCADA;
-			cm++;
+			return 1;
 		}else{
 			m[f][c] = MAL_MARCADA;
+			return 0;
 		}
 	}
-	return cm;
 }
 // hay que hacerla
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
@@ -158,8 +158,8 @@ main () {
 	do{
 		//system("clear");
 		imprimir(tablero);
-		printf("Marcadas: %d", marcadas);
-		printf("Exploradas: %d", exploradas);
+		printf("Marcadas: %d ", marcadas);
+		printf("Exploradas: %d\n", exploradas);
 		printf("Realice su jugada: \n");
 		scanf("%c%c%c%c%c", &op, &esp, &filachar, &columnachar, &enter);
 		fila = filachar - 'A';
