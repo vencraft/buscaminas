@@ -1,20 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
-
 #define BOMBA_MUESTRA -6
 #define BOMBA_EXPLOTA -5
 #define BOMBA -1
 #define MARCADA -2
 #define MAL_MARCADA -3
 #define INTERROGACION -4
-
 #define CANT_FILA 4
 #define CANT_COL 4
-
-
 //falta funcion marcar que se hizo en la clase anterior
-
-
 /*
 * Inicia la matriz que se mostrará al inicio sin las bombas.
 */
@@ -25,7 +19,6 @@ void inicializar(int m[CANT_FILA][CANT_COL]){
 		}
 	}
 }
-
 /*
 * Coloca las bombas en el tablero luego de realizada la primer jugada 
 * del usuario, para asegurarse de que no haya una bomba alli.
@@ -43,16 +36,15 @@ void poner_bombas(int m[CANT_FILA][CANT_COL],int bombas, int x, int y){
 		}
 	}
 }
-
 /*
 * Recorre la matriz e imprime el tablero en pantalla.
 */
 void imprimir(int m[CANT_FILA][CANT_COL]){
 	printf("BUSCAMINAS\n");
 	printf("Opciones:\n");
-    printf("E: Explorar\n");
-    printf("M: Marcar\n");
-    printf("B: Buscar\n");
+	printf("E: Explorar\n");
+	printf("M: Marcar\n");
+	printf("B: Buscar\n");
 	printf("  ");
 	for (int i = 0; i < CANT_COL; i++){
 		printf("%c ", i + 'A');
@@ -74,11 +66,10 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 					//printf("%d",m[i][j]);
 				}	
 		}
-		printf("\n");			
+		printf("\n");
 	}
 	
 }
-
 /*
 * Funcion que verifica si hay bombas en la celda, siempre
 * que esta sea valida; si la coordenada es valida y hay bomba
@@ -92,14 +83,12 @@ int hayBombas( int m[CANT_FILA][CANT_COL], int x, int y){
 	}
 	return 0;
 }
-
 /*
 * Explora la casilla y verifica la cantidad de bombas
 * adyacentes; si hay bomba se pierde, de lo contrario 
 * se asigna el numero de bombas cercanas.
 */
 bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
-
 	if (m[x][y] == BOMBA || m[x][y] == MARCADA){
 		m[x][y] = BOMBA_EXPLOTA;
 		for(int i = 0; i < CANT_COL; i++){
@@ -112,7 +101,6 @@ bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 		return false;
 	}else{
 		int suma_bombas = 0;
-
 		suma_bombas+=hayBombas(m,x-1,y); //arriba
 		suma_bombas+=hayBombas(m,x+1,y); //abajo
 		suma_bombas+=hayBombas(m,x,y-1); //izquierda
@@ -126,7 +114,6 @@ bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 		return true;
 	}
 }
-
 /*
 * Marca posible bomba en el tablero.
 */
@@ -139,10 +126,9 @@ int marcar(int m[CANT_FILA][CANT_COL], int f, int c){
 			}else{
 				m[f][c] = MAL_MARCADA;
 			}
-        }
-        return cm;
+		}
+		return cm;
 }
-
 // hay que hacerla
 bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] >= 0){
@@ -162,8 +148,6 @@ bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 		
 	}	
 }
-
-
 main () {
 	int tablero[CANT_FILA][CANT_COL];
 	bool fin = false;
@@ -172,14 +156,12 @@ main () {
 	char op,esp,filachar,columnachar,enter;
 	// Asigna varores iniciales sin bombas en el tablero.
 	inicializar(tablero);
-
 	printf("¡Bienvenido al BUSCAMINAS!\n");
 	printf("Ingrese cantidad de bombas:\n");
 	scanf("%d%c",&cant_bombas,&enter);
 	
 	marcadas = cant_bombas;
 	exploradas = CANT_FILA * CANT_COL - cant_bombas;
-	
 	do{
 		//system("clear");
 		imprimir(tablero);
@@ -189,7 +171,6 @@ main () {
 		scanf("%c%c%c%c%c", &op, &esp, &filachar, &columnachar, &enter);
 		fila = filachar - 'A';
 		columna = columnachar - 'A';
-
 		switch(op){
 			case 'E':{	// Comprueba si es la primer jugada
 						if (primerajugada == true){
@@ -228,15 +209,12 @@ main () {
 				
 					}		
 		}
-
 		if (marcadas == 0 && exploradas == 0){
 			imprimir(tablero);
 			printf("¡¡HAS GANADO LA PARTIDA!!\n");
 			fin = true;
 		}
-		
 	}while(fin == false);
-	
 	/*imprimir(tablero);
 	if (marcadas == 0 && exploradas == 0){
 		printf("¡¡HAS GANADO LA PARTIDA!!\n");
@@ -244,6 +222,4 @@ main () {
 		printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 	}
 	*/
-}	
-
-		
+}
