@@ -7,8 +7,8 @@
 #define BOMBA_MARCADA -2
 #define MAL_MARCADA -3
 #define INTERROGACION -4
-#define CANT_FILA 4
-#define CANT_COL 4
+#define CANT_FILA 8
+#define CANT_COL 8
 //falta funcion marcar que se hizo en la clase anterior
 /*
 * Inicia la matriz que se mostrará al inicio sin las bombas.
@@ -64,41 +64,40 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
 			}else{
-				printf("? ");
-				//printf("%d",m[i][j]);
+				//printf("? ");
+				printf("%d",m[i][j]);
 			}
 		}
 		printf("\n");
 	}
 }
-/*
-* Funcion que verifica si hay bombas en la celda, siempre
-* que esta sea valida; si la coordenada es valida y hay bomba
-* devuelve un 1, de lo contrario devuelve un 0.
-*/
-int hayBombas( int m[CANT_FILA][CANT_COL], int x, int y){
+int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
-		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+int hayObjeto( int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
+	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
+		if(m[x][y] == objeto){
 			return 1;
 		}
+		return 0;
 	}
 	return 0;
 }
-int hayM( int m[CANT_FILA][CANT_COL], int x, int y){
-	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
-		if(m[x][y] == MAL_MARCADA || m[x][y] == BOMBA_MARCADA){
-			return 1;
-		}else{
-            return 2;
-        }
-	return 0;
-    }
-}
-bool casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
-	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
-			return true;
-	}
-	return false;
+int cuenta_obj_adyacentes(int m[CANT_FILA][CANT_COL],int x, int y, int objeto){
+	int suma_objetos = 0;
+	suma_objetos+=hayObjeto(m,x-1,y-1,objeto);	//a11
+	suma_objetos+=hayObjeto(m,x-1,y,objeto);	//a12
+	suma_objetos+=hayObjeto(m,x-1,y+1,objeto);	//a13
+	suma_objetos+=hayObjeto(m,x,y-1,objeto);	//a21
+	suma_objetos+=hayObjeto(m,x,y+1,objeto);	//a23
+	suma_objetos+=hayObjeto(m,x+1,y-1,objeto);	//a31
+	suma_objetos+=hayObjeto(m,x+1,y,objeto);	//a32
+	suma_objetos+=hayObjeto(m,x+1,y+1,objeto);	//a31
+	return suma_objetos;
 }
 /*
 * Explora la casilla y verifica la cantidad de bombas
@@ -106,32 +105,24 @@ bool casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 * se asigna el numero de bombas cercanas.
 */
 int explorar(int m[CANT_FILA][CANT_COL], int x, int y){
-	if(m[x][y] >= 0){
-        return 2;
-    }else if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA){
-		m[x][y] = BOMBA_EXPLOTA;
-		for(int i = 0; i < CANT_COL; i++){
-			for(int j = 0; j < CANT_FILA; j++){
-				if(m[i][j] == BOMBA){
-					m[i][j] = BOMBA_MUESTRA;
+	if(m[x][y] < 0){
+		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA){
+			m[x][y] = BOMBA_EXPLOTA;
+			for(int i = 0; i < CANT_COL; i++){
+				for(int j = 0; j < CANT_FILA; j++){
+					if(m[i][j] == BOMBA){
+						m[i][j] = BOMBA_MUESTRA;
+					}
 				}
 			}
+			return 1;
+		}else{
+			m[x][y] = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
+			return 0;
 		}
-		return 1;
 	}else{
-		int suma_bombas = 0;
-		suma_bombas+=hayBombas(m,x-1,y); //arriba
-		suma_bombas+=hayBombas(m,x+1,y); //abajo
-		suma_bombas+=hayBombas(m,x,y-1); //izquierda
-		suma_bombas+=hayBombas(m,x,y+1); //derecha
-		suma_bombas+=hayBombas(m,x-1,y-1); //arriba izquierda
-		suma_bombas+=hayBombas(m,x+1,y+1); //abajo derecha
-		suma_bombas+=hayBombas(m,x-1,y+1); //arriba derecha
-		suma_bombas+=hayBombas(m,x+1,y-1); //abajo izquierda
-		m[x][y] = suma_bombas;
-		return 0;
+		return 2;
 	}
-
 }
 /*
 * Marca posible bomba en el tablero.
@@ -143,11 +134,11 @@ int marcar(int m[CANT_FILA][CANT_COL], int x, int y){
 			m[x][y] = BOMBA_MARCADA;
 			return 1;
 		}else if(m[x][y] == BOMBA_MARCADA){
-            m[x][y] = BOMBA;
-            return 2;
-        }else if(m[x][y] == MAL_MARCADA){
-            m[x][y] = INTERROGACION;
-            return 0;
+			m[x][y] = BOMBA;
+			return 2;
+		}else if(m[x][y] == MAL_MARCADA){
+			m[x][y] = INTERROGACION;
+			return 0;
 		}else{
 			m[x][y] = MAL_MARCADA;
 			return 0;
@@ -155,98 +146,49 @@ int marcar(int m[CANT_FILA][CANT_COL], int x, int y){
 	}
 	return 0;
 }
-// hay que hacerla
-bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){
-	//Cuenta las M
-	int suma_M = 0;
-
-        if (hayM(m,x-1,y-1) == 1){
-            suma_M++;
-        } //arriba
-        if (hayM(m,x-1,y) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x-1,y+1) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x,y-1) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x,y+1) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x+1,y-1) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x+1,y) == 1){
-            suma_M++;
-        }
-        if (hayM(m,x+1,y+1) == 1){
-            suma_M++;
-        }
 /*
-		suma_M+=hayM(m,x-1,y); //arriba
-		suma_M+=hayM(m,x+1,y); //abajo
-		suma_M+=hayM(m,x,y-1); //izquierda
-		suma_M+=hayM(m,x,y+1); //derecha
-		suma_M+=hayM(m,x-1,y-1); //arriba izquierda
-		suma_M+=hayM(m,x+1,y+1); //abajo derecha
-		suma_M+=hayM(m,x-1,y+1); //arriba derecha
-		suma_M+=hayM(m,x+1,y-1); //abajo izquierda
+* Busca bombas en casilleros con valor 0 o minas adyacentes marcadas.
 */
-        printf("suma M: %d\n", suma_M);
-    if (m[x][y] == suma_M){
-
-        int a11 = hayM(m,x-1,y-1);
-        int a12 = hayM(m,x-1,y);
-        int a13 = hayM(m,x-1,y+1);
-        int a21 = hayM(m,x,y-1);
-        int a23 = hayM(m,x,y+1);
-        int a31 = hayM(m,x+1,y-1);
-        int a32 = hayM(m,x+1,y);
-        int a33 = hayM(m,x+1,y+1);
-
-
-        if(a11 != 1){
-            explorar(m,x-1,y-1);
-        }
-        if(a12 != 1){
-            explorar(m,x-1,y);
-        }
-        if(a13 != 1){
-            explorar(m,x-1,y+1);
-        }
-        if(a21 != 1){
-            explorar(m,x,y-1);
-        }
-        if(a23 != 1){
-            explorar(m,x,y+1);
-        }
-        if(a31 != 1){
-            explorar(m,x+1,y-1);
-        }
-        if(a32 != 1){
-            explorar(m,x+1,y);
-        }
-        if(a33 != 1){
-            explorar(m,x+1,y+1);
-        }
-    }
-/*  }
-	if(m[x][y] >= 0){
-		int cant = m[x][y]; //numero que tengo en ese lugar
-		// repetir 8 veces por todas las casillas adyacentes
-		if(x-1 >= 0){
-			if(m[x-1][y] == MAL_MARCADA){
-				return false;
-			}else if(m[x-1][y] == MARCADA){
-				cant--;
-			}
+int buscar(int m[CANT_FILA][CANT_COL], int x, int y){	
+	int suma_M = cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA) + cuenta_obj_adyacentes(m,x,y,MAL_MARCADA);
+		printf("suma M: %d\n", suma_M);
+	if(m[x][y] == suma_M){
+		int a11 = casillaExiste(m,x-1,y-1);
+		int a12 = casillaExiste(m,x-1,y);
+		int a13 = casillaExiste(m,x-1,y+1);
+		int a21 = casillaExiste(m,x,y-1);
+		int a23 = casillaExiste(m,x,y+1);
+		int a31 = casillaExiste(m,x+1,y-1);
+		int a32 = casillaExiste(m,x+1,y);
+		int a33 = casillaExiste(m,x+1,y+1);
+		if(a11 == 1){
+			explorar(m,x-1,y-1);
+			
 		}
-		//if (cant == 0)
+		if(a12 == 1){
+			explorar(m,x-1,y);
+		}
+		if(a13 == 1){
+			explorar(m,x-1,y+1);
+		}
+		if(a21 == 1){
+			explorar(m,x,y-1);
+		}
+		if(a23 == 1){
+			explorar(m,x,y+1);
+		}
+		if(a31 == 1){
+			explorar(m,x+1,y-1);
+		}
+		if(a32 == 1){
+			explorar(m,x+1,y);
+		}
+		if(a33 == 1){
+			explorar(m,x+1,y+1);
+		}
 	}
-*/
 }
+
 main () {
 	int tablero[CANT_FILA][CANT_COL];
 	bool fin = false;
@@ -284,24 +226,24 @@ main () {
 					primerajugada = false;
 					// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
 				}else{
-                    int ex = explorar(tablero,fila,columna);
-                    if (ex == 1){
-                        imprimir(tablero);
-                        printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
-                        fin = true;
-                    }else if (ex == 0){
-                        exploradas-= 1;
-                    }
+					int ex = explorar(tablero,fila,columna);
+					if(ex == 1){
+						imprimir(tablero);
+						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
+						fin = true;
+					}else if (ex == 0){
+						exploradas-= 1;
+					}
 				}
 				break;
 				}
 			case 'M':{
 				int ma = marcar(tablero,fila,columna);
-				if (ma == 1){
-                    marcadas-= 1;
-                }else if(ma == 2){
-                    marcadas+= 1;
-                }
+				if(ma == 1){
+					marcadas-= 1;
+				}else if(ma == 2){
+					marcadas+= 1;
+				}
 				break;
 				}
 			case 'B':{
