@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#define BOMBA_MUESTRA -6
-#define BOMBA_EXPLOTA -5
-#define BOMBA -1
-#define BOMBA_MARCADA -2
-#define MAL_MARCADA -3
-#define INTERROGACION -4
 #define CANT_FILA 8
 #define CANT_COL 8
+#define BOMBA -1
+#define BOMBA_MARCADA -2
+#define BOMBA_EXPLOTA -3
+#define BOMBA_MUESTRA -4
+#define MAL_MARCADA -5
+#define INTERROGACION -6
 //falta funcion marcar que se hizo en la clase anterior
 /*
 * Inicia la matriz que se mostrará al inicio sin las bombas.
@@ -72,6 +72,9 @@ void imprimir(int m[CANT_FILA][CANT_COL],int num_bombas){
 		printf("\n");
 	}
 }
+/*
+* Cuenta la cantidad de veces que se encuentra un objeto en el tablero.
+*/
 int cuenta_obj_tablero(int m[CANT_FILA][CANT_COL],int objeto){
 	int cuenta_objeto = 0;
 	for(int i = 0; i < CANT_COL; i++){
@@ -83,6 +86,9 @@ int cuenta_obj_tablero(int m[CANT_FILA][CANT_COL],int objeto){
 	}
 	return cuenta_objeto;
 }
+/*
+* Verifica que la coordenada ingresada sea valida y que existe un casillero.
+*/
 int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
 		return 1;
@@ -90,6 +96,9 @@ int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 		return 0;
 	}
 }
+/*
+* Verifica si hay un determinado objeto en una casilla.
+*/
 int hayObjeto( int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
 		if(m[x][y] == objeto){
@@ -99,6 +108,9 @@ int hayObjeto( int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
 	}
 	return 0;
 }
+/*
+* Suma objetos adyacentes a la casilla seleccionada que sean del mismo tipo.
+*/
 int cuenta_obj_adyacentes(int m[CANT_FILA][CANT_COL],int x, int y, int objeto){
 	int suma_objetos = 0;
 	suma_objetos+=hayObjeto(m,x-1,y-1,objeto);	//a11
