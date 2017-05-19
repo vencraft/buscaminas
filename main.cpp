@@ -41,9 +41,9 @@ void poner_bombas(int m[CANT_FILA][CANT_COL],int bombas, int x, int y){
 /*
 * Recorre la matriz e imprime el tablero en pantalla.
 */
-void imprimir(int m[CANT_FILA][CANT_COL]){
+void imprimir(int m[CANT_FILA][CANT_COL],int num_bombas){
 	printf("##############################\n");
-	printf("BUSCAMINAS\n");
+	printf("BUSCAMINAS\tBombas: %d\n",num_bombas);
 	printf("Opciones:\n");
 	printf("E: Explorar\n");
 	printf("M: Marcar\n");
@@ -71,6 +71,17 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 		}
 		printf("\n");
 	}
+}
+int cuenta_obj_tablero(int m[CANT_FILA][CANT_COL],int objeto){
+	int cuenta_objeto = 0;
+	for(int i = 0; i < CANT_COL; i++){
+		for(int j = 0; j < CANT_FILA; j++){
+			if(m[i][j] == objeto){
+				cuenta_objeto++;
+			}
+		}
+	}
+	return cuenta_objeto;
 }
 int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
@@ -227,7 +238,7 @@ main () {
 	int tablero[CANT_FILA][CANT_COL];
 	bool fin = false;
 	bool primerajugada = true;
-	int fila,columna,cant_bombas,marcadas,exploradas;
+	int fila,columna,cant_bombas,marcadas,exploradas,marcadas_tablero;
 	char op,esp,filachar,columnachar,enter;
 	// Asigna varores iniciales sin bombas en el tablero.
 	inicializar(tablero);
@@ -241,11 +252,13 @@ main () {
 		printf("Ingrese cantidad de bombas: ");
 		scanf("%d%c",&cant_bombas,&enter);
 	}
+
 	marcadas = cant_bombas;
 	exploradas = CANT_FILA * CANT_COL - cant_bombas;
 	do{
 		//system("clear");
-		imprimir(tablero);
+		marcadas_tablero = cant_bombas - cuenta_obj_tablero(tablero,MAL_MARCADA) - cuenta_obj_tablero(tablero,BOMBA_MARCADA);
+		imprimir(tablero,marcadas_tablero);
 		//printf("Marcadas: %d ", marcadas);
 		//printf("Exploradas: %d\n", exploradas);
 		printf("Realice su jugada: ");
@@ -255,6 +268,10 @@ main () {
 		scanf("%c%c%c%c%c", &op, &esp, &filachar, &columnachar, &enter);
 		fila = filachar - 'A';
 		columna = columnachar - 'A';
+		printf("Opcion: %d\n",op);
+		printf("Columna: %d\n",columna);
+		printf("Fila: %d\n",fila);
+		if (columna >= 0 && columna < CANT_COL && fila >= 0 && fila < CANT_FILA){
 		switch(op){
 			case 'E':{// Comprueba si es la primer jugada.
 				if(primerajugada == true){
@@ -269,7 +286,7 @@ main () {
 				}else{
 					int ex = explorar(tablero,fila,columna);
 					if(ex == 1){
-						imprimir(tablero);
+						imprimir(tablero,marcadas_tablero);
 						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 						fin = true;
 					}else if (ex == 0){
@@ -290,7 +307,7 @@ main () {
 			case 'B':{
 				int bu = buscar(tablero,fila,columna);
 				if(bu < 0){
-					imprimir(tablero);
+					imprimir(tablero,marcadas_tablero);
 					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 					fin = true;
 				}else{
@@ -302,9 +319,10 @@ main () {
 			}
 		}
 		if(marcadas == 0 && exploradas == 0){
-			imprimir(tablero);
+			imprimir(tablero,marcadas_tablero);
 			printf("¡¡HAS GANADO LA PARTIDA!!\n");
 			fin = true;
+		}
 		}
 	}while(fin == false);
 }
