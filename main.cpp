@@ -65,8 +65,8 @@ void imprimir(int m[CANT_FILA][CANT_COL],int num_bombas){
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
 			}else{
-				//printf(". ");
-				printf("%d",m[i][j]);
+				printf(". ");
+				//printf("%d",m[i][j]);
 			}
 		}
 		printf("\n");
@@ -139,7 +139,7 @@ int cuenta_obj_adyacentes(int m[CANT_FILA][CANT_COL],int x, int y, int objeto){
 */
 int explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] < 0){
-		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA){
+		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA || m[x][y] == BOMBA_EXPLOTA){
 			m[x][y] = BOMBA_EXPLOTA;
 			return 1;
 		}else{
@@ -192,56 +192,56 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 			if(explorar(m,x-1,y-1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x-1,y-1);
+				buscar(m,x-1,y-1);
 			}
 		}
 		if(m[x-1][y] < 0 && casillaExiste(m,x-1,y) == 1 && a12 == 0){
 			if(explorar(m,x-1,y) == 1){
 				 explota = 1;
 			}else{
-				//buscar(m,x-1,y);
+				buscar(m,x-1,y);
 			}
 		}
 		if(m[x-1][y+1] < 0 && casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
 			if(explorar(m,x-1,y+1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x-1,y+1);
+				buscar(m,x-1,y+1);
 			}
 		}
 		if(m[x][y-1] < 0 && casillaExiste(m,x,y-1) == 1 && a21 == 0){
 			if(explorar(m,x,y-1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x,y-1);
+				buscar(m,x,y-1);
 			}
 		}
 		if(m[x][y+1] < 0 && casillaExiste(m,x,y+1) == 1 && a23 == 0){
 			if(explorar(m,x,y+1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x,y+1);
+				buscar(m,x,y+1);
 			}
 		}
 		if(m[x+1][y-1] < 0 && casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
 			if(explorar(m,x+1,y-1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x+1,y-1);
+				buscar(m,x+1,y-1);
 			}
 		}
 		if(m[x+1][y] < 0 && casillaExiste(m,x+1,y) == 1 && a32 == 0){
 			if(explorar(m,x+1,y) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x+1,y);
+				buscar(m,x+1,y);
 			}
 		}
 		if(m[x+1][y+1] < 0 && casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
 			if(explorar(m,x+1,y+1) == 1){
 				explota = 1;
 			}else{
-				//buscar(m,x+1,y+1);
+				buscar(m,x+1,y+1);
 			}
 		}
 	}
@@ -273,8 +273,8 @@ main () {
 		//system("clear");
 		marcadas_tablero = cant_bombas - cuenta_obj_tablero(tablero,MAL_MARCADA) - cuenta_obj_tablero(tablero,BOMBA_MARCADA);
 		imprimir(tablero,marcadas_tablero);
-		printf("Marcadas: %d ", marcadas);
-		printf("Exploradas: %d\n", cuenta_exploradas(tablero));
+		//printf("Marcadas: %d ", marcadas);
+		//printf("Exploradas: %d\n", cuenta_exploradas(tablero));
 		printf("Realice su jugada: ");
 		/*
 		* Obtener datos del usuario.
