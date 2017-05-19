@@ -65,7 +65,7 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
 			}else{
-				printf("? ");
+				printf(". ");
 				//printf("%d",m[i][j]);
 			}
 		}
