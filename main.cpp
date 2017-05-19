@@ -89,7 +89,7 @@ int cuenta_obj_tablero(int m[CANT_FILA][CANT_COL],int objeto){
 /*
 * Verifica que la coordenada ingresada sea valida y que existe un casillero.
 */
-int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
+int casillaExiste(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
 		return 1;
 	}else{
@@ -99,7 +99,13 @@ int casillaExiste( int m[CANT_FILA][CANT_COL], int x, int y){
 /*
 * Verifica si hay un determinado objeto en una casilla.
 */
-int hayObjeto( int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
+int hayObjeto(int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
+	if(casillaExiste(m,x,y) == 1 && m[x][y] == objeto){
+		return 1;
+	}else{
+		return 0;
+	}
+/*
 	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
 		if(m[x][y] == objeto){
 			return 1;
@@ -107,6 +113,7 @@ int hayObjeto( int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
 		return 0;
 	}
 	return 0;
+*/
 }
 /*
 * Suma objetos adyacentes a la casilla seleccionada que sean del mismo tipo.
