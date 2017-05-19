@@ -42,6 +42,7 @@ void poner_bombas(int m[CANT_FILA][CANT_COL],int bombas, int x, int y){
 * Recorre la matriz e imprime el tablero en pantalla.
 */
 void imprimir(int m[CANT_FILA][CANT_COL]){
+	printf("##############################\n");
 	printf("BUSCAMINAS\n");
 	printf("Opciones:\n");
 	printf("E: Explorar\n");
@@ -64,8 +65,8 @@ void imprimir(int m[CANT_FILA][CANT_COL]){
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
 			}else{
-				//printf("? ");
-				printf("%d",m[i][j]);
+				printf("? ");
+				//printf("%d",m[i][j]);
 			}
 		}
 		printf("\n");
@@ -150,43 +151,76 @@ int marcar(int m[CANT_FILA][CANT_COL], int x, int y){
 * Busca bombas en casilleros con valor 0 o minas adyacentes marcadas.
 */
 int buscar(int m[CANT_FILA][CANT_COL], int x, int y){	
+	int explora = 0;
 	int suma_M = cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA) + cuenta_obj_adyacentes(m,x,y,MAL_MARCADA);
-		printf("suma M: %d\n", suma_M);
+	//printf("suma M: %d\n", suma_M);
 	if(m[x][y] == suma_M){
-		int a11 = casillaExiste(m,x-1,y-1);
-		int a12 = casillaExiste(m,x-1,y);
-		int a13 = casillaExiste(m,x-1,y+1);
-		int a21 = casillaExiste(m,x,y-1);
-		int a23 = casillaExiste(m,x,y+1);
-		int a31 = casillaExiste(m,x+1,y-1);
-		int a32 = casillaExiste(m,x+1,y);
-		int a33 = casillaExiste(m,x+1,y+1);
-		if(a11 == 1){
-			explorar(m,x-1,y-1);
-			
+		int a11 = hayObjeto(m,x-1,y-1,BOMBA_MARCADA) + hayObjeto(m,x-1,y-1,MAL_MARCADA);
+		int a12 = hayObjeto(m,x-1,y  ,BOMBA_MARCADA) + hayObjeto(m,x-1,y  ,MAL_MARCADA);
+		int a13 = hayObjeto(m,x-1,y+1,BOMBA_MARCADA) + hayObjeto(m,x-1,y+1,MAL_MARCADA);
+		int a21 = hayObjeto(m,x	 ,y-1,BOMBA_MARCADA) + hayObjeto(m,x  ,y-1,MAL_MARCADA);
+		int a23 = hayObjeto(m,x  ,y+1,BOMBA_MARCADA) + hayObjeto(m,x  ,y+1,MAL_MARCADA);
+		int a31 = hayObjeto(m,x+1,y-1,BOMBA_MARCADA) + hayObjeto(m,x+1,y-1,MAL_MARCADA);
+		int a32 = hayObjeto(m,x+1,y  ,BOMBA_MARCADA) + hayObjeto(m,x+1,y  ,MAL_MARCADA);
+		int a33 = hayObjeto(m,x+1,y+1,BOMBA_MARCADA) + hayObjeto(m,x+1,y+1,MAL_MARCADA);
+		if(m[x-1][y-1] < 0 && casillaExiste(m,x-1,y-1) == 1 && a11 == 0){
+			if(explorar(m,x-1,y-1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a12 == 1){
-			explorar(m,x-1,y);
+		if(m[x-1][y] < 0 && casillaExiste(m,x-1,y) == 1 && a12 == 0){
+			if(explorar(m,x-1,y) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a13 == 1){
-			explorar(m,x-1,y+1);
+		if(m[x-1][y+1] < 0 && casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
+			if(explorar(m,x-1,y+1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a21 == 1){
-			explorar(m,x,y-1);
+		if(m[x][y-1] < 0 && casillaExiste(m,x,y-1) == 1 && a21 == 0){
+			if(explorar(m,x,y-1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a23 == 1){
-			explorar(m,x,y+1);
+		if(m[x][y+1] < 0 && casillaExiste(m,x,y+1) == 1 && a23 == 0){
+			if(explorar(m,x,y+1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a31 == 1){
-			explorar(m,x+1,y-1);
+		if(m[x+1][y-1] < 0 && casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
+			if(explorar(m,x+1,y-1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a32 == 1){
-			explorar(m,x+1,y);
+		if(m[x+1][y] < 0 && casillaExiste(m,x+1,y) == 1 && a32 == 0){
+			if(explorar(m,x+1,y) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
-		if(a33 == 1){
-			explorar(m,x+1,y+1);
+		if(m[x+1][y+1] < 0 && casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
+			if(explorar(m,x+1,y+1) == 1){
+				explora = -10;
+			}else{
+				explora++;
+			}
 		}
 	}
+	return explora;
 }
 
 main () {
@@ -197,17 +231,24 @@ main () {
 	char op,esp,filachar,columnachar,enter;
 	// Asigna varores iniciales sin bombas en el tablero.
 	inicializar(tablero);
+	printf("##############################\n");
 	printf("¡Bienvenido al BUSCAMINAS!\n");
-	printf("Ingrese cantidad de bombas:\n");
+	printf("Ingrese cantidad de bombas: ");
 	scanf("%d%c",&cant_bombas,&enter);
+	while(cant_bombas >= (CANT_FILA*CANT_COL) || cant_bombas <= 0){
+		printf("##############################\n");
+		printf("¡NUMERO INVALIDO!.\n");
+		printf("Ingrese cantidad de bombas: ");
+		scanf("%d%c",&cant_bombas,&enter);
+	}
 	marcadas = cant_bombas;
 	exploradas = CANT_FILA * CANT_COL - cant_bombas;
 	do{
 		//system("clear");
 		imprimir(tablero);
-		printf("Marcadas: %d ", marcadas);
-		printf("Exploradas: %d\n", exploradas);
-		printf("Realice su jugada: \n");
+		//printf("Marcadas: %d ", marcadas);
+		//printf("Exploradas: %d\n", exploradas);
+		printf("Realice su jugada: ");
 		/*
 		* Obtener datos del usuario.
 		*/
@@ -236,7 +277,7 @@ main () {
 					}
 				}
 				break;
-				}
+			}
 			case 'M':{
 				int ma = marcar(tablero,fila,columna);
 				if(ma == 1){
@@ -245,13 +286,20 @@ main () {
 					marcadas+= 1;
 				}
 				break;
-				}
+			}
 			case 'B':{
-				buscar(tablero,fila,columna);
+				int bu = buscar(tablero,fila,columna);
+				if(bu < 0){
+					imprimir(tablero);
+					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
+					fin = true;
+				}else{
+					exploradas-= bu;
+				}
 				break;
-				}
+			}
 			default:{
-				}
+			}
 		}
 		if(marcadas == 0 && exploradas == 0){
 			imprimir(tablero);
@@ -259,11 +307,4 @@ main () {
 			fin = true;
 		}
 	}while(fin == false);
-	/*imprimir(tablero);
-	if (marcadas == 0 && exploradas == 0){
-		printf("¡¡HAS GANADO LA PARTIDA!!\n");
-	}else{
-		printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
-	}
-	*/
 }
