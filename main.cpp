@@ -287,9 +287,9 @@ main () {
 		scanf("%c%c%c%c%c", &op, &esp, &filachar, &columnachar, &enter);
 		fila = filachar - 'A';
 		columna = columnachar - 'A';
-		printf("Opcion: %d\n",op);
-		printf("Columna: %d\n",columna);
-		printf("Fila: %d\n",fila);
+		//printf("Opcion: %d\n",op);
+		//printf("Columna: %d\n",columna);
+		//printf("Fila: %d\n",fila);
 		if (columna >= 0 && columna < CANT_COL && fila >= 0 && fila < CANT_FILA){
 		switch(op){
 			case 'E':{// Comprueba si es la primer jugada.
