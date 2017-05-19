@@ -65,8 +65,8 @@ void imprimir(int m[CANT_FILA][CANT_COL],int num_bombas){
 			}else if(m[i][j] == BOMBA_MUESTRA){
 				printf("* ");
 			}else{
-				printf(". ");
-				//printf("%d",m[i][j]);
+				//printf(". ");
+				printf("%d",m[i][j]);
 			}
 		}
 		printf("\n");
@@ -116,15 +116,6 @@ int hayObjeto(int m[CANT_FILA][CANT_COL], int x, int y, int objeto){
 	}else{
 		return 0;
 	}
-/*
-	if(x >= 0 && x < CANT_FILA && y >= 0 && y < CANT_COL){
-		if(m[x][y] == objeto){
-			return 1;
-		}
-		return 0;
-	}
-	return 0;
-*/
 }
 /*
 * Suma objetos adyacentes a la casilla seleccionada que sean del mismo tipo.
@@ -150,13 +141,6 @@ int explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] < 0){
 		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA){
 			m[x][y] = BOMBA_EXPLOTA;
-			for(int i = 0; i < CANT_COL; i++){
-				for(int j = 0; j < CANT_FILA; j++){
-					if(m[i][j] == BOMBA){
-						m[i][j] = BOMBA_MUESTRA;
-					}
-				}
-			}
 			return 1;
 		}else{
 			m[x][y] = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
@@ -208,65 +192,56 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 			if(explorar(m,x-1,y-1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x-1,y-1);
-
+				//buscar(m,x-1,y-1);
 			}
 		}
 		if(m[x-1][y] < 0 && casillaExiste(m,x-1,y) == 1 && a12 == 0){
 			if(explorar(m,x-1,y) == 1){
 				 explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x-1,y);
+				//buscar(m,x-1,y);
 			}
 		}
 		if(m[x-1][y+1] < 0 && casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
 			if(explorar(m,x-1,y+1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x-1,y+1);
+				//buscar(m,x-1,y+1);
 			}
 		}
 		if(m[x][y-1] < 0 && casillaExiste(m,x,y-1) == 1 && a21 == 0){
 			if(explorar(m,x,y-1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x,y-1);
+				//buscar(m,x,y-1);
 			}
 		}
 		if(m[x][y+1] < 0 && casillaExiste(m,x,y+1) == 1 && a23 == 0){
 			if(explorar(m,x,y+1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x,y+1);
+				//buscar(m,x,y+1);
 			}
 		}
 		if(m[x+1][y-1] < 0 && casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
 			if(explorar(m,x+1,y-1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x+1,y-1);
+				//buscar(m,x+1,y-1);
 			}
 		}
 		if(m[x+1][y] < 0 && casillaExiste(m,x+1,y) == 1 && a32 == 0){
 			if(explorar(m,x+1,y) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x+1,y);
+				//buscar(m,x+1,y);
 			}
 		}
 		if(m[x+1][y+1] < 0 && casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
 			if(explorar(m,x+1,y+1) == 1){
 				explota = 1;
 			}else{
-			//	explora++;
-				buscar(m,x+1,y+1);
+				//buscar(m,x+1,y+1);
 			}
 		}
 	}
@@ -277,7 +252,7 @@ main () {
 	int tablero[CANT_FILA][CANT_COL];
 	bool fin = false;
 	bool primerajugada = true;
-	int fila,columna,cant_bombas,marcadas,exploradas,marcadas_tablero,aExplorar;
+	int fila,columna,cant_bombas,marcadas,marcadas_tablero,aExplorar;
 	char op,esp,filachar,columnachar,enter;
 	// Asigna varores iniciales sin bombas en el tablero.
 	inicializar(tablero);
@@ -298,8 +273,8 @@ main () {
 		//system("clear");
 		marcadas_tablero = cant_bombas - cuenta_obj_tablero(tablero,MAL_MARCADA) - cuenta_obj_tablero(tablero,BOMBA_MARCADA);
 		imprimir(tablero,marcadas_tablero);
-		//printf("Marcadas: %d ", marcadas);
-		//printf("Exploradas: %d\n", exploradas);
+		printf("Marcadas: %d ", marcadas);
+		printf("Exploradas: %d\n", cuenta_exploradas(tablero));
 		printf("Realice su jugada: ");
 		/*
 		* Obtener datos del usuario.
@@ -311,58 +286,63 @@ main () {
 		//printf("Columna: %d\n",columna);
 		//printf("Fila: %d\n",fila);
 		if (columna >= 0 && columna < CANT_COL && fila >= 0 && fila < CANT_FILA){
-		switch(op){
-			case 'E':{// Comprueba si es la primer jugada.
-				if(primerajugada == true){
-					// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
-					inicializar(tablero);
-					// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
-					poner_bombas(tablero,cant_bombas,fila,columna);
-					explorar(tablero,fila,columna);
-					exploradas = cuenta_exploradas(tablero);
-					primerajugada = false;
-					// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
-				}else{
-					int ex = explorar(tablero,fila,columna);
-					if(ex == 1){
+			switch(op){
+				case 'E':{// Comprueba si es la primer jugada.
+					if(primerajugada == true){
+						// Vuelve a iniciar el tablero por si el usuario marco casillas antes de empezar.
+						inicializar(tablero);
+						// Pone las bombas por primera y unica vez omitiendo la coordenada ingresada.
+						poner_bombas(tablero,cant_bombas,fila,columna);
+						explorar(tablero,fila,columna);
+						primerajugada = false;
+						// Si la exploracion no es true, es porque exploto una bomba y se termina el juego.
+					}else if(explorar(tablero,fila,columna) == 1){
+						for(int i = 0; i < CANT_COL; i++){
+							for(int j = 0; j < CANT_FILA; j++){
+								if(tablero[i][j] == BOMBA){
+									tablero[i][j] = BOMBA_MUESTRA;
+								}
+							}
+						}
+						imprimir(tablero,marcadas_tablero);
+						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
+						fin = true;	
+					}
+					break;
+				}
+				case 'M':{
+					int ma = marcar(tablero,fila,columna);
+					if(ma == 1){
+						marcadas-= 1;
+					}else if(ma == 2){
+						marcadas+= 1;
+					}
+					break;
+				}
+				case 'B':{
+					int bu = buscar(tablero,fila,columna);
+					if(bu == 1){
 						imprimir(tablero,marcadas_tablero);
 						printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
 						fin = true;
-					}else if (ex == 0){
-						exploradas = cuenta_exploradas(tablero);
+						for(int i = 0; i < CANT_COL; i++){
+							for(int j = 0; j < CANT_FILA; j++){
+								if(tablero[i][j] == BOMBA){
+									tablero[i][j] = BOMBA_MUESTRA;
+								}
+							}
+						}
 					}
+					break;
 				}
-				break;
-			}
-			case 'M':{
-				int ma = marcar(tablero,fila,columna);
-				if(ma == 1){
-					marcadas-= 1;
-				}else if(ma == 2){
-					marcadas+= 1;
+				default:{
 				}
-				break;
-			}
-			case 'B':{
-				int bu = buscar(tablero,fila,columna);
-				if(bu == 1){
-					imprimir(tablero,marcadas_tablero);
-					printf("¡¡HAS PERDIDO LA PARTIDA!!\n");
-					fin = true;
-				}else{
-					exploradas = cuenta_exploradas(tablero);
-				}
-				break;
-			}
-			default:{
 			}
 		}
-		printf("Cuenta de exploradas: %d\n",cuenta_exploradas(tablero));
 		if(marcadas == 0 && cuenta_exploradas(tablero) == aExplorar){
 			imprimir(tablero,marcadas_tablero);
 			printf("¡¡HAS GANADO LA PARTIDA!!\n");
 			fin = true;
-		}
 		}
 	}while(fin == false);
 }
