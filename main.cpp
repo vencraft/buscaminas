@@ -194,62 +194,45 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 		int a32 = hayObjeto(m,x+1,y  ,BOMBA_MARCADA) + hayObjeto(m,x+1,y  ,MAL_MARCADA);
 		int a33 = hayObjeto(m,x+1,y+1,BOMBA_MARCADA) + hayObjeto(m,x+1,y+1,MAL_MARCADA);
 		// Explora casillas adyacentes que no salgan del rango de la matriz y que no hayan sido marcadas.
-//----> Probar de quitar la comprobacion de casilla menor a cero, no parece ser necesario.
-		if(m[x-1][y-1] < 0 && casillaExiste(m,x-1,y-1) == 1 && a11 == 0){
+		if(casillaExiste(m,x-1,y-1) == 1 && a11 == 0){
 			if(explorar(m,x-1,y-1) == 1){
 				// Si al explorar habia una bomba (porque no marco esa casilla), pierde el juego.
 				explota = 1;
-			}else{
-			//	buscar(m,x-1,y-1);
 			}
 		}
-		if(m[x-1][y] < 0 && casillaExiste(m,x-1,y) == 1 && a12 == 0){
+		if(casillaExiste(m,x-1,y) == 1 && a12 == 0){
 			if(explorar(m,x-1,y) == 1){
 				 explota = 1;
-			}else{
-			//	buscar(m,x-1,y);
 			}
 		}
-		if(m[x-1][y+1] < 0 && casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
+		if(casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
 			if(explorar(m,x-1,y+1) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x-1,y+1);
 			}
 		}
-		if(m[x][y-1] < 0 && casillaExiste(m,x,y-1) == 1 && a21 == 0){
+		if(casillaExiste(m,x,y-1) == 1 && a21 == 0){
 			if(explorar(m,x,y-1) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x,y-1);
 			}
 		}
-		if(m[x][y+1] < 0 && casillaExiste(m,x,y+1) == 1 && a23 == 0){
+		if(casillaExiste(m,x,y+1) == 1 && a23 == 0){
 			if(explorar(m,x,y+1) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x,y+1);
 			}
 		}
-		if(m[x+1][y-1] < 0 && casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
+		if(casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
 			if(explorar(m,x+1,y-1) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x+1,y-1);
 			}
 		}
-		if(m[x+1][y] < 0 && casillaExiste(m,x+1,y) == 1 && a32 == 0){
+		if(casillaExiste(m,x+1,y) == 1 && a32 == 0){
 			if(explorar(m,x+1,y) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x+1,y);
 			}
 		}
-		if(m[x+1][y+1] < 0 && casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
+		if(casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
 			if(explorar(m,x+1,y+1) == 1){
 				explota = 1;
-			}else{
-			//	buscar(m,x+1,y+1);
 			}
 		}
 	}
