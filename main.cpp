@@ -140,16 +140,45 @@ int cuenta_obj_adyacentes(int m[CANT_FILA][CANT_COL],int x, int y, int objeto){
 * adyacentes; si hay bomba se pierde, de lo contrario
 * se le asigna el numero de bombas cercanas a ese casillero.
 */
+//---->>> Añadir que no borre las marcadas incorrectas??
 int explorar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] < 0){
 		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA || m[x][y] == BOMBA_EXPLOTA){
 			m[x][y] = BOMBA_EXPLOTA;
 			return 1;
 		}else{
-			m[x][y] = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
+            int num = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
+			m[x][y] = num;
+            if(num == 0){
+                if(casillaExiste(m,x-1,y-1) == 1){
+                    explorar(m,x-1,y-1);
+                }
+                if(casillaExiste(m,x+1,y+1) == 1){
+                    explorar(m,x+1,y+1);
+                }
+                if(casillaExiste(m,x,y-1) == 1){
+                    explorar(m,x,y-1);
+                }
+                if(casillaExiste(m,x-1,y) == 1){
+                    explorar(m,x-1,y);
+                }
+                if(casillaExiste(m,x,y+1) == 1){
+                    explorar(m,x,y+1);
+                }
+                if(casillaExiste(m,x+1,y) == 1){
+                    explorar(m,x+1,y);
+                }
+                if(casillaExiste(m,x+1,y-1) == 1){
+                    explorar(m,x+1,y-1);
+                }
+                if(casillaExiste(m,x-1,y+1) == 1){
+                    explorar(m,x-1,y+1);
+                }
+            }
 			return 0;
 		}
 	}else{
+
 		return 2;
 	}
 }
@@ -179,11 +208,12 @@ int marcar(int m[CANT_FILA][CANT_COL], int x, int y){
 * Busca bombas en casilleros con valor 0 o minas adyacentes marcadas.
 */
 int buscar(int m[CANT_FILA][CANT_COL], int x, int y){	
-	int explota = 0;
 	// Suma celdas adyacentes MARCADAS
 	int suma_M = cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA) + cuenta_obj_adyacentes(m,x,y,MAL_MARCADA);
 	// Si el numero de celdas MARCADAS adyacentes coincide con el numero de la celda, realiza la operacion buscar
-	if(m[x][y] == suma_M){
+	if(m[x][y] != suma_M){
+		return 0;
+	}else{
 		// Comprueba si la casilla adyacente esta MARCADA
 		int a11 = hayObjeto(m,x-1,y-1,BOMBA_MARCADA) + hayObjeto(m,x-1,y-1,MAL_MARCADA);
 		int a12 = hayObjeto(m,x-1,y  ,BOMBA_MARCADA) + hayObjeto(m,x-1,y  ,MAL_MARCADA);
@@ -193,51 +223,63 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 		int a31 = hayObjeto(m,x+1,y-1,BOMBA_MARCADA) + hayObjeto(m,x+1,y-1,MAL_MARCADA);
 		int a32 = hayObjeto(m,x+1,y  ,BOMBA_MARCADA) + hayObjeto(m,x+1,y  ,MAL_MARCADA);
 		int a33 = hayObjeto(m,x+1,y+1,BOMBA_MARCADA) + hayObjeto(m,x+1,y+1,MAL_MARCADA);
-		// Explora casillas adyacentes que no salgan del rango de la matriz y que no hayan sido marcadas.
-		if(casillaExiste(m,x-1,y-1) == 1 && a11 == 0){
-			if(explorar(m,x-1,y-1) == 1){
-				// Si al explorar habia una bomba (porque no marco esa casilla), pierde el juego.
-				explota = 1;
+		// Comprueba si hay casillas adyacentes mal marcadas, en tal caso explota dicha casilla y se termina el juego.
+		if(cuenta_obj_adyacentes(m,x,y,MAL_MARCADA) > 0){
+			if(hayObjeto(m,x-1,y-1,MAL_MARCADA)){
+				m[x-1][y-1] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x-1,y) == 1 && a12 == 0){
-			if(explorar(m,x-1,y) == 1){
-				 explota = 1;
+			if(hayObjeto(m,x+1,y+1,MAL_MARCADA)){
+				m[x+1][y+1] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x-1,y+1) == 1 && a13 == 0){
-			if(explorar(m,x-1,y+1) == 1){
-				explota = 1;
+			if(hayObjeto(m,x,y-1,MAL_MARCADA)){
+				m[x][y-1] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x,y-1) == 1 && a21 == 0){
-			if(explorar(m,x,y-1) == 1){
-				explota = 1;
+			if(hayObjeto(m,x-1,y,MAL_MARCADA)){
+				m[x-1][y] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x,y+1) == 1 && a23 == 0){
-			if(explorar(m,x,y+1) == 1){
-				explota = 1;
+			if(hayObjeto(m,x,y+1,MAL_MARCADA)){
+				m[x][y+1] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x+1,y-1) == 1 && a31 == 0){
-			if(explorar(m,x+1,y-1) == 1){
-				explota = 1;
+			if(hayObjeto(m,x+1,y,MAL_MARCADA)){
+				m[x+1][y] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x+1,y) == 1 && a32 == 0){
-			if(explorar(m,x+1,y) == 1){
-				explota = 1;
+			if(hayObjeto(m,x+1,y-1,MAL_MARCADA)){
+				m[x+1][y-1] = BOMBA_EXPLOTA;
 			}
-		}
-		if(casillaExiste(m,x+1,y+1) == 1 && a33 == 0){
-			if(explorar(m,x+1,y+1) == 1){
-				explota = 1;
+			if(hayObjeto(m,x-1,y+1,MAL_MARCADA)){
+				m[x-1][y+1] = BOMBA_EXPLOTA;
 			}
+			return 1;
+		}else{
+			// Explora casillas adyacentes que no salgan del rango de la matriz y que no hayan sido marcadas.
+            if(casillaExiste(m,x-1,y-1) == 1 && a11 != 1){
+                explorar(m,x-1,y-1);
+            }
+            if(casillaExiste(m,x+1,y+1) == 1 && a33 != 1){
+				explorar(m,x+1,y+1);
+            }
+            if(casillaExiste(m,x,y-1) == 1 && a21 != 1){
+                explorar(m,x,y-1);
+            }
+            if(casillaExiste(m,x-1,y) == 1 && a12 != 1){
+                explorar(m,x-1,y);
+            }
+            if(casillaExiste(m,x,y+1) == 1 && a23 != 1){
+                explorar(m,x,y+1);
+            }
+            if(casillaExiste(m,x+1,y) == 1 && a32 != 1){
+                explorar(m,x+1,y);
+            }
+            if(casillaExiste(m,x+1,y-1) == 1 && a31 != 1){
+                explorar(m,x+1,y-1);
+            }
+            if(casillaExiste(m,x-1,y+1) == 1 && a13 != 1){
+                explorar(m,x-1,y+1);
+            }
+           // }
+			return 0;
 		}
 	}
-	// Devuelve si explota o no luego de explorar las casillas adyacentes.
-	return explota;
 }
 /*
 * Si pierde, se muestra la ubicacion de las bombas en pantalla.
