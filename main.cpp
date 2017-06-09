@@ -86,6 +86,17 @@ int cuenta_exploradas(int m[CANT_FILA][CANT_COL]){
 	}
 	return cexplorada;
 }
+int cuenta_marcadas(int m[CANT_FILA][CANT_COL]){
+	int cmarcada = 0;
+	for(int i = 0; i < CANT_COL; i++){
+		for(int j = 0; j < CANT_FILA; j++){
+			if(m[i][j] == BOMBA_MARCADA || m[i][j] == MAL_MARCADA){
+				cmarcada++;
+			}
+		}
+	}
+	return cmarcada;
+}
 /*
 * Cuenta cantidad de objetos del mismo tipo en el tablero.
 */
@@ -141,78 +152,69 @@ int cuenta_obj_adyacentes(int m[CANT_FILA][CANT_COL],int x, int y, int objeto){
 * se le asigna el numero de bombas cercanas a ese casillero.
 */
 //---->>> Añadir que no borre las marcadas incorrectas??
-int explorar(int m[CANT_FILA][CANT_COL], int x, int y){
-	if(m[x][y] < 0){
-		if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA || m[x][y] == BOMBA_EXPLOTA){
-			m[x][y] = BOMBA_EXPLOTA;
-			return 1;
-		}else{
-            int num = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
-			m[x][y] = num;
-            if(num == 0){
-                if(casillaExiste(m,x-1,y-1) == 1){
-                    explorar(m,x-1,y-1);
-                }
-                if(casillaExiste(m,x+1,y+1) == 1){
-                    explorar(m,x+1,y+1);
-                }
-                if(casillaExiste(m,x,y-1) == 1){
-                    explorar(m,x,y-1);
-                }
-                if(casillaExiste(m,x-1,y) == 1){
-                    explorar(m,x-1,y);
-                }
-                if(casillaExiste(m,x,y+1) == 1){
-                    explorar(m,x,y+1);
-                }
-                if(casillaExiste(m,x+1,y) == 1){
-                    explorar(m,x+1,y);
-                }
-                if(casillaExiste(m,x+1,y-1) == 1){
-                    explorar(m,x+1,y-1);
-                }
-                if(casillaExiste(m,x-1,y+1) == 1){
-                    explorar(m,x-1,y+1);
-                }
+bool explorar(int m[CANT_FILA][CANT_COL], int x, int y){
+	if(m[x][y] == BOMBA || m[x][y] == BOMBA_MARCADA || m[x][y] == BOMBA_EXPLOTA){
+		m[x][y] = BOMBA_EXPLOTA;
+		return false;
+	}else if(m[x][y] < 0){
+        int num = cuenta_obj_adyacentes(m,x,y,BOMBA) + cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA);
+		m[x][y] = num;
+        if(num == 0){
+            if(casillaExiste(m,x-1,y-1) == 1){
+                explorar(m,x-1,y-1);
             }
-			return 0;
+            if(casillaExiste(m,x+1,y+1) == 1){
+                explorar(m,x+1,y+1);
+            }
+            if(casillaExiste(m,x,y-1) == 1){
+                explorar(m,x,y-1);
+            }
+            if(casillaExiste(m,x-1,y) == 1){
+                explorar(m,x-1,y);
+            }
+            if(casillaExiste(m,x,y+1) == 1){
+                explorar(m,x,y+1);
+            }
+            if(casillaExiste(m,x+1,y) == 1){
+                explorar(m,x+1,y);
+            }
+            if(casillaExiste(m,x+1,y-1) == 1){
+                explorar(m,x+1,y-1);
+            }
+            if(casillaExiste(m,x-1,y+1) == 1){
+                explorar(m,x-1,y+1);
+            }
 		}
+		return true;
 	}else{
-
-		return 2;
+		return true;
 	}
 }
 /*
 * Marca posible bomba en el tablero.
 */
-int marcar(int m[CANT_FILA][CANT_COL], int x, int y){
-	int cm = 0;
+void marcar(int m[CANT_FILA][CANT_COL], int x, int y){
 	if(m[x][y] < 0){
 		if(m[x][y] == BOMBA){
 			m[x][y] = BOMBA_MARCADA;
-			return 1;
 		}else if(m[x][y] == BOMBA_MARCADA){
 			m[x][y] = BOMBA;
-			return 2;
 		}else if(m[x][y] == MAL_MARCADA){
 			m[x][y] = INTERROGACION;
-			return 0;
 		}else{
 			m[x][y] = MAL_MARCADA;
-			return 0;
 		}
 	}
-	return 0;
 }
 /*
 * Busca bombas en casilleros con valor 0 o minas adyacentes marcadas.
 */
-int buscar(int m[CANT_FILA][CANT_COL], int x, int y){	
+bool buscar(int m[CANT_FILA][CANT_COL], int x, int y){	
 	// Suma celdas adyacentes MARCADAS
 	int suma_M = cuenta_obj_adyacentes(m,x,y,BOMBA_MARCADA) + cuenta_obj_adyacentes(m,x,y,MAL_MARCADA);
 	// Si el numero de celdas MARCADAS adyacentes coincide con el numero de la celda, realiza la operacion buscar
 	if(m[x][y] != suma_M){
-		return 0;
+		return true;
 	}else{
 		// Comprueba si la casilla adyacente esta MARCADA
 		int a11 = hayObjeto(m,x-1,y-1,BOMBA_MARCADA) + hayObjeto(m,x-1,y-1,MAL_MARCADA);
@@ -249,7 +251,7 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
 			if(hayObjeto(m,x-1,y+1,MAL_MARCADA)){
 				m[x-1][y+1] = BOMBA_EXPLOTA;
 			}
-			return 1;
+			return false;
 		}else{
 			// Explora casillas adyacentes que no salgan del rango de la matriz y que no hayan sido marcadas.
             if(casillaExiste(m,x-1,y-1) == 1 && a11 != 1){
@@ -276,8 +278,7 @@ int buscar(int m[CANT_FILA][CANT_COL], int x, int y){
             if(casillaExiste(m,x-1,y+1) == 1 && a13 != 1){
                 explorar(m,x-1,y+1);
             }
-           // }
-			return 0;
+			return true;
 		}
 	}
 }
@@ -314,9 +315,7 @@ main () {
 		printf("Ingrese cantidad de bombas: ");
 		scanf("%d%c",&cant_bombas,&enter);
 	}
-	marcadas = cant_bombas;
 	aExplorar = (CANT_COL * CANT_FILA) - cant_bombas;
-	
 	do{
 		// Muestra contador de bombas restantes a MARCAR (esten bien o mal marcadas)
 		marcadas_tablero = cant_bombas - cuenta_obj_tablero(tablero,MAL_MARCADA) - cuenta_obj_tablero(tablero,BOMBA_MARCADA);
@@ -339,24 +338,18 @@ main () {
 						explorar(tablero,fila,columna);
 						primerajugada = false;
 						// Si la exploracion da 1 es porque exploto una bomba y se termina el juego.
-					}else if(explorar(tablero,fila,columna) == 1){
+					}else if(!(explorar(tablero,fila,columna))){
 						perdio(tablero,marcadas_tablero);
 						fin = true;	
 					}
 					break;
 				}
 				case 'M':{
-					int ma = marcar(tablero,fila,columna);
-					if(ma == 1){
-						marcadas-= 1;
-					}else if(ma == 2){
-						marcadas+= 1;
-					}
+					marcar(tablero,fila,columna);
 					break;
 				}
 				case 'B':{
-					int bu = buscar(tablero,fila,columna);
-					if(bu == 1){
+					if(!(buscar(tablero,fila,columna))){
 						perdio(tablero,marcadas_tablero);
 						fin = true;	
 					}
@@ -367,7 +360,8 @@ main () {
 			}
 		}
 		// Si se marcaron todas las bombas correctamente, y se explora el tablero completo, se gana el juego.
-		if(marcadas == 0 && cuenta_exploradas(tablero) == aExplorar){
+		printf("%d", cuenta_marcadas(tablero));
+		if(cuenta_marcadas(tablero) == cant_bombas && cuenta_exploradas(tablero) == aExplorar){
 			imprimir(tablero,marcadas_tablero);
 			printf("¡¡HAS GANADO LA PARTIDA!!\n");
 			fin = true;
